@@ -3,6 +3,13 @@ import util
 
 app = Flask(__name__)
 
+@app.route('/', methods=['GET'])
+def welcome():
+    response = jsonify({"message": "Welcome"})
+    response.headers.add('Access-Control-Allow-Origin', '*')
+
+    return response
+
 @app.route('/get_location_names', methods=['GET'])
 def get_location_names():
     response = jsonify({
