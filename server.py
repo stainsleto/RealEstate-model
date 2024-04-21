@@ -1,9 +1,11 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 import util
 from pymongo import MongoClient
 from bson.objectid import ObjectId
 
 app = Flask(__name__)
+CORS(app)
 util.load_saved_artifacts()
 
 mongo_uri = 'mongodb+srv://superAdmin:superAdmin123@realestate.ivmmyaf.mongodb.net/realestate_app'
