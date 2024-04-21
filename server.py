@@ -30,7 +30,7 @@ def get_location_names():
     return response
 
 @app.route('/predict_home_price', methods=['GET', 'POST'])
-def predict_home_price():
+async def predict_home_price():
 
     data = request.json
     total_sqft = float(data['total_sqft'])
@@ -39,7 +39,7 @@ def predict_home_price():
     bath = int(data['bath'])
     product_id= data['id']
 
-    estimated_price = util.get_estimated_price(location,total_sqft,bhk,bath)
+    estimated_price = await util.get_estimated_price(location,total_sqft,bhk,bath)
 
     query = {'_id': ObjectId(product_id)}
     update = {'$set': {'price': estimated_price}}
