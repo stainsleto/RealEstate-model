@@ -1,7 +1,15 @@
 from flask import Flask, request, jsonify
 import util
+from pymongo import MongoClient
+from bson.objectid import ObjectId
 
 app = Flask(__name__)
+util.load_saved_artifacts()
+
+mongo_uri = 'mongodb+srv://superAdmin:superAdmin123@realestate.ivmmyaf.mongodb.net/realestate_app'
+client = MongoClient(mongo_uri)
+db = client.get_database()
+collection = db['realestates']
 
 @app.route('/', methods=['GET'])
 def welcome():
@@ -25,15 +33,22 @@ def predict_home_price():
     location = request.form['location']
     bhk = int(request.form['bhk'])
     bath = int(request.form['bath'])
+    product_id= request.form['id']
+
+    estimated_price = util.get_estimated_price(location,total_sqft,bhk,bath)
+
+    query = {'_id': ObjectId(product_id)}
+    update = {'$set': {'price': estimated_price}}
+    collection.update_one(query, update)
 
     response = jsonify({
-        'estimated_price': util.get_estimated_price(location,total_sqft,bhk,bath)
+        'estimated_price': estimated_price
     })
     response.headers.add('Access-Control-Allow-Origin', '*')
 
     return response
 
-if __name__ == "__main__":
-    print("Starting Python Flask Server For Home Price Prediction...")
-    util.load_saved_artifacts()
-    app.run()
+# if __name__ == "__main__":
+#     print("Starting Python Flask Server For Home Price Prediction...")
+#     util.load_saved_artifacts()
+#     app.run()
