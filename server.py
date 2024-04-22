@@ -39,7 +39,7 @@ async def predict_home_price():
     bath = int(data['bath'])
     product_id= data['id']
 
-    estimated_price = await util.get_estimated_price(location,total_sqft,bhk,bath)
+    estimated_price =  util.get_estimated_price(location,total_sqft,bhk,bath)
 
     query = {'_id': ObjectId(product_id)}
     update = {'$set': {'price': estimated_price}}
