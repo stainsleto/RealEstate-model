@@ -42,7 +42,7 @@ async def predict_home_price():
     estimated_price =  util.get_estimated_price(location,total_sqft,bhk,bath)
 
     query = {'_id': ObjectId(product_id)}
-    update = {'$set': {'price': estimated_price}}
+    update = {'$set': {'predictedPrice': estimated_price}}
     collection.update_one(query, update)
 
     response = jsonify({
